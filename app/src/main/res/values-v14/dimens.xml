@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="widget_margin">0dp</dimen> <!-- plant_widget.xml -->
+</resources>
+
+<!--
+https://classroom.udacity.com/nanodegrees/nd801/parts/443745fb-4ae4-4918-8ea1-6bf24e356c1d/modules/6cb81da9-d083-4721-a31b-4f435de9fedd/lessons/f133dd92-8e3c-40b9-9d9d-545498638459/concepts/a60b73c7-f2ce-4f74-9e97-4e1e6e9fa2a4
+
+Widget Margins
+
+Since Android API 14 and onwards, Android automatically includes margins between widgets as they appear on the user's home screen.
+
+However, on previous API versions this was not the case, so it's still a good idea to specify a margin to include around the widget on devices running Android versions less than 14.
+
+This is a case where we can exploit the fact that we have values folders targeting these two categories of user API levels. We will define the margins in our XML layout file by referring to a dimension resource. Under the "values" directory, we've created a new file named "dimens.xml"
+
+To prevent newer Android versions from using this margin (since they already include a built in margin):
+
+A new "res/values-v14" folder contains a copy of that file which targets API levels from 14 onwards, however the margin value here is set to 0dp.
+
+Now when the XML layout refers to this dimension value using its name, a value of zero will be used on devices running API 14 plus and a value of 8dp will be used otherwise.
+
+-->
