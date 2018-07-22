@@ -21,11 +21,16 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.example.android.mygarden.ui.MainActivity;
 
+import java.util.Arrays;
+
 public class PlantWidgetProvider extends AppWidgetProvider {
+
+    final static private String TAG = PlantWidgetProvider.class.getSimpleName();
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -37,13 +42,22 @@ public class PlantWidgetProvider extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.plant_widget);
         // Widgets allow click handlers to only launch pending intents
         views.setOnClickPendingIntent(R.id.widget_plant_image, pendingIntent);
+
         // TODO (4): Create a PendingIntent for the PlantWateringService and setOnClickPendingIntent for widget_water_button
+        Intent wateringIntent = new Intent(context, PlantWateringService.class);
+        wateringIntent.setAction(PlantWateringService.ACTION_WATER_PLANTS);
+        PendingIntent wateringPendingIntent =
+                PendingIntent.getService(context, 0, wateringIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(R.id.widget_water_button, wateringPendingIntent);
+
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Log.d(TAG, "onUpdate() called with: context = [" + context + "], appWidgetManager = [" +
+                appWidgetManager + "], appWidgetIds = [" + Arrays.toString(appWidgetIds) + "]");
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
@@ -52,16 +66,20 @@ public class PlantWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
+        Log.d(TAG, "onDeleted() called with: context = [" + context + "], appWidgetIds = [" +
+                Arrays.toString(appWidgetIds) + "]");
         // Perform any action when one or more AppWidget instances have been deleted
     }
 
     @Override
     public void onEnabled(Context context) {
+        Log.d(TAG, "onEnabled() called with: context = [" + context + "]");
         // Perform any action when an AppWidget for this provider is instantiated
     }
 
     @Override
     public void onDisabled(Context context) {
+        Log.d(TAG, "onDisabled() called with: context = [" + context + "]");
         // Perform any action when the last AppWidget instance for this provider is deleted
     }
 
